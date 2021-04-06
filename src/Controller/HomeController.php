@@ -25,7 +25,7 @@ class HomeController
 //    }
 
     /**
-     * @Route ("/")
+     * @Route ("/ram")
      */
     public function scrap_page(){
         $client= new Client();
