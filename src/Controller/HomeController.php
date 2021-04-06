@@ -13,14 +13,21 @@ class HomeController
     /**
      * @Route("/")
      */
-    public function homepage(){
+    public function home_page(){
         return new Response("HomePage");
+    }
+
+    /**
+     * @Route("/other")
+     */
+    public function other_page(){
+        return new Response("OtherPage");
     }
 
     /**
      * @Route ("/scrap")
      */
-    public function scrap(){
+    public function scrap_page(){
         $client= new Client();
         $link= 'https://www.iplt20.com/teams/rajasthan-royals/squad/1154/ben-stokes';
         $crawler= $client->request('GET', $link);
