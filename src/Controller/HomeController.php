@@ -10,22 +10,22 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class HomeController
 {
-    /**
-     * @Route("/")
-     */
-    public function home_page(){
-        return new Response("HomePage");
-    }
+//    /**
+//     * @Route("/")
+//     */
+//    public function home_page(){
+//        return new Response("HomePage");
+//    }
+//
+//    /**
+//     * @Route("/other")
+//     */
+//    public function other_page(){
+//        return new Response("OtherPage");
+//    }
 
     /**
-     * @Route("/other")
-     */
-    public function other_page(){
-        return new Response("OtherPage");
-    }
-
-    /**
-     * @Route ("/scrap")
+     * @Route ("/")
      */
     public function scrap_page(){
         $client= new Client();
