@@ -4,6 +4,8 @@
 namespace App\Controller;
 
 
+use App\Entity\PlayersData;
+use Doctrine\ORM\EntityManagerInterface;
 use Goutte\Client;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -19,6 +21,7 @@ class HomeController extends AbstractController
         array("id"=>"4","name"=>"punjab-kings"),
         array("id"=>"8","name"=>"rajasthan-royals"),
         array("id"=>"62","name"=>"sunrisers-hyderabad"),
+        array("id"=>"9","name"=>"royal-challengers-bangalore")
     );
 
     /**
@@ -32,12 +35,12 @@ class HomeController extends AbstractController
     /**
      * @Route ("/update-data")
      */
-    public function update_data(){
+    public function update_data(EntityManagerInterface $entityManager){
         foreach ($this->teams as $team) {
             echo "<h1>Data for ".$team["name"]."</h1>";
             $link=sprintf('https://cricketapi.platform.iplt20.com/tournaments/22399/squads/%d?matchTypes=ALL', $team["id"]);
             echo sprintf("<a href=%s>%s</a><br>", $link, $link);
-            $this->team_page($link, $team["name"]);
+            $this->team_page($link,$team["id"],$team["name"], $entityManager);
         }
         return new Response("DataPage");
     }
@@ -45,7 +48,7 @@ class HomeController extends AbstractController
     /**
      * @Route ("/team-info/{team_link}/{team-name}")
      */
-    public function team_page($team_link, $team_name){
+    public function team_page($team_link, $team_id, $team_name, $entityManager){
         $link= $team_link;
 
         $json = file_get_contents($link);
@@ -56,7 +59,7 @@ class HomeController extends AbstractController
             $name=str_replace(" ", "-",strtolower($data["fullName"])) ;
             $squad_name=$team_name;
             print("<h3>Getting data for: ".$id."&nbsp". $name."</h3>");
-            $this->player_data( $squad_name,$id, $name);
+            $this->player_data( $squad_name,$team_id, $id, $name, $entityManager);
         }
         return new Response("Ram");
     }
@@ -64,24 +67,44 @@ class HomeController extends AbstractController
     /**
      * @Route ("/player-data/{squad_name}/{id}/{name}")
      */
-    public function player_data($squad_name, $id, $name){
+    public function player_data($squad_name,$team_id, $id, $name, $entityManager){
         $client= new Client();
         $link= sprintf('https://www.iplt20.com/teams/%s/squad/%s/%s',$squad_name,$id,$name);
         echo sprintf("<a href=%s>%s</a><br>", $link, $link);
         $crawler= $client->request('GET', $link);
-        $player= $crawler->filter('.player-hero__name');
-        $player->each(function ($node) {
+        $player_name_data= $crawler->filter('.player-hero__name');
+        $player_name="";
+        $player_name_data->each(function ($node) use (&$player_name) {
             print($node->text(). "\t");
+            $player_name=$node->text();
         });
         print("<br>");
+        $repository= $entityManager->getRepository(PlayersData::class);
+
+        $new_data=true;
+
+        $player= $repository->findOneBy(['player_id'=>$id]);
+        if($player!=null){
+            $new_data=false;
+            echo "Player's data already exists<br>";
+        }else {
+            $player = new PlayersData();
+        }
+        $player->setPlayerId(intval($id))
+            ->setTeamId(intval($team_id))
+            ->setPlayerName($player_name);
+
         $data=$crawler->filter('.player-stats-table__highlight');
         if(count($data)==0){
             echo "<h4>Data not found for ".$name."</h4>";
+            $entityManager->persist($player);
+
+            $entityManager->flush();
+            return new Response("Ram");
         }
-        $data->each(function ($node, $i){
+        $data->each(function ($node, $i) use(&$player){
             if($i==0){
                 $bat_data= explode(" ",$node->text());
-//                var_dump($bat_data);
                 print("Matches: ". $bat_data[1]."<br>");
                 print("Not outs: ". $bat_data[2]."<br>");
                 print("Runs: ". $bat_data[3]."<br>");
@@ -93,17 +116,46 @@ class HomeController extends AbstractController
                 print("4s: ". $bat_data[10]."<br>");
                 print("6s: ". $bat_data[11]."<br>");
                 print("Catches: ". $bat_data[12]."<br>");
+
+                $player->setMatches($bat_data[1])
+                    ->setNotOuts($bat_data[2])
+                    ->setRuns($bat_data[3])
+                    ->setHighest($bat_data[4])
+                    ->setBattingAverage($bat_data[5])
+                    ->setStrikeRate($bat_data[7])
+                    ->setHundreds($bat_data[8])
+                    ->setFifties($bat_data[9])
+                    ->setFours($bat_data[10])
+                    ->setSixes($bat_data[11])
+                    ->setCatches($bat_data[12]);
             }
             else if($i==1){
                 $bowl_data= explode(" ",$node->text());
-                print("Overs: ". (int)(str_replace(',','',$bowl_data[2],)/6)."<br>");
+                $overs=(int)(str_replace(',','',$bowl_data[2])/6);
+                print("Overs: ". $overs."<br>");
                 print("Wickets: ". ($bowl_data[4])."<br>");
                 print("Average: ". ($bowl_data[6])."<br>");
                 print("Economy: ". ($bowl_data[7])."<br>");
                 print("4 Wickets: ". ($bowl_data[9])."<br>");
+
+                $player->setOvers($overs)
+                    ->setWickets($bowl_data[4])
+                    ->setAverage($bowl_data[6])
+                    ->setEconomy($bowl_data[7])
+                    ->setFourWickets($bowl_data[9]);
             }
             print($i. "\t". $node->text(). "<br>");
         });
+
+        $entityManager->persist($player);
+
+        $entityManager->flush();
+
+        if($new_data)
+            echo "<h3>New data successfully Inserted</h3>";
+        else
+            echo "<h3>Data successfully Updated</h3>";
+
         return new Response("Ram");
     }
 
