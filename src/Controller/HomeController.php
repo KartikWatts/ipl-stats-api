@@ -29,7 +29,6 @@ class HomeController extends AbstractController
      */
     public function home_page(){
         return $this->render("home.html.twig",[]);
-//        return new Response("HomePage");
     }
 
     /**
@@ -90,9 +89,14 @@ class HomeController extends AbstractController
         }else {
             $player = new PlayersData();
         }
+        $image_url=sprintf('https://static.iplt20.com/players/284/%d.png',$id);
         $player->setPlayerId(intval($id))
             ->setTeamId(intval($team_id))
-            ->setPlayerName($player_name);
+            ->setPlayerName($player_name)
+            ->setImageUrl($image_url);
+        ;
+
+        echo "<div style='display:flex; flex-direction:row; align-self:center; justify-content:start '><img src='".$image_url."'/>";
 
         $data=$crawler->filter('.player-stats-table__highlight');
         if(count($data)==0){
@@ -100,6 +104,7 @@ class HomeController extends AbstractController
             $entityManager->persist($player);
 
             $entityManager->flush();
+            echo"</div>";
             return new Response("Ram");
         }
         $data->each(function ($node, $i) use(&$player){
@@ -150,6 +155,8 @@ class HomeController extends AbstractController
         $entityManager->persist($player);
 
         $entityManager->flush();
+
+        echo"</div>";
 
         if($new_data)
             echo "<h3>New data successfully Inserted</h3>";

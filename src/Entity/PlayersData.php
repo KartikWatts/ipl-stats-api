@@ -35,6 +35,11 @@ class PlayersData
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
+    private $image_url;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
     private $matches;
 
     /**
@@ -161,6 +166,18 @@ class PlayersData
     public function setPlayerName(string $player_name): self
     {
         $this->player_name = $player_name;
+
+        return $this;
+    }
+
+    public function getImageUrl(): ?string
+    {
+        return $this->image_url;
+    }
+
+    public function setImageUrl(string $image_url): self
+    {
+        $this->image_url = $image_url;
 
         return $this;
     }
