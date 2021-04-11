@@ -5,6 +5,7 @@ namespace App\Controller;
 
 
 use App\Repository\PlayersDataRepository;
+use App\Repository\SecretKeysRepository;
 use App\Repository\TeamsDataRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -16,12 +17,14 @@ class ApiDataController extends AbstractController
 {
     private $playerRepository;
     private $teamsRepository;
+    private $secretRepository;
     private $squads_data;
 
-    public function __construct(PlayersDataRepository $playerRepository, TeamsDataRepository $teamsRepository)
+    public function __construct(PlayersDataRepository $playerRepository, TeamsDataRepository $teamsRepository, SecretKeysRepository $secretRepository)
     {
         $this->playerRepository= $playerRepository;
         $this->teamsRepository= $teamsRepository;
+        $this->secretRepository= $secretRepository;
         $this->squads_data= $this->teamsRepository->findAll();
     }
 
@@ -159,11 +162,14 @@ class ApiDataController extends AbstractController
         $post_data = json_decode($request->getContent(), true);
         $start_range = 0;
         $data_count = 25;
+        $secret_key="";
 
         if(isset($post_data['start_range']))
             $start_range = $post_data['start_range'];
         if(isset($post_data['data_count']))
             $data_count = $post_data['data_count'];
+        if(isset($post_data['secret_key']))
+            $secret_key= $post_data['secret_key'];
 
         if(!is_int($start_range) || !is_int($data_count)){
             return new JsonResponse("Range should only be in integers.", Response::HTTP_FORBIDDEN);
@@ -180,6 +186,12 @@ class ApiDataController extends AbstractController
 
         if($start_range + $data_count> $last_row){
             $data_count= $last_row-$start_range;
+        }
+
+        $admin_data= $this->secretRepository->findOneBy(['secret_key'=>$secret_key]);
+        if($admin_data){
+            $start_range=0;
+            $data_count= $last_row;
         }
 
         $players=$this->playerRepository->findPlayersInRange($start_range, $data_count);

@@ -5,7 +5,8 @@ namespace App\Controller;
 
 
 use App\Entity\PlayersData;
-use Doctrine\ORM\EntityManagerInterface;
+use App\Repository\PlayersDataRepository;
+use App\Repository\SecretKeysRepository;
 use Goutte\Client;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -13,6 +14,15 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class HomeController extends AbstractController
 {
+    private $playersRepository;
+    private $secretRepository;
+    private $manager;
+
+    public function __construct(PlayersDataRepository $playersRepository, SecretKeysRepository $secretRepository){
+        $this->playersRepository= $playersRepository;
+        $this->secretRepository= $secretRepository;
+    }
+
     public $teams= array(
         array("id"=>"1","name"=>"chennai-super-kings"),
         array("id"=>"3","name"=>"delhi-capitals"),
@@ -32,29 +42,25 @@ class HomeController extends AbstractController
     }
 
     /**
-     * @Route ("/update-data")
-     * @param EntityManagerInterface $entityManager
+     * @Route ("/update-data/{secret_key}", methods={"GET"})
+     * @param $secret_key
      * @return Response
      */
-    public function update_data(EntityManagerInterface $entityManager){
+    public function update_data($secret_key){
+        $admin_data= $this->secretRepository->findOneBy(['secret_key'=>$secret_key]);
+        if(!$admin_data){
+            return new Response("UNAUTHORIZED!!!");
+        }
         foreach ($this->teams as $team) {
             echo "<h1>Data for ".$team["name"]."</h1>";
             $link=sprintf('https://cricketapi.platform.iplt20.com/tournaments/22399/squads/%d?matchTypes=ALL', $team["id"]);
             echo sprintf("<a href=%s>%s</a><br>", $link, $link);
-            $this->team_page($link,$team["id"],$team["name"], $entityManager);
+            $this->team_page($link,$team["id"],$team["name"]);
         }
         return new Response("DataPage");
     }
 
-    /**
-     * @Route ("/team-info/{team_link}/{team-name}")
-     * @param $team_link
-     * @param $team_id
-     * @param $team_name
-     * @param $entityManager
-     * @return Response
-     */
-    public function team_page($team_link, $team_id, $team_name, $entityManager){
+    public function team_page($team_link, $team_id, $team_name){
         $link= $team_link;
 
         $json = file_get_contents($link);
@@ -65,21 +71,12 @@ class HomeController extends AbstractController
             $name=str_replace(" ", "-",strtolower($data["fullName"])) ;
             $squad_name=$team_name;
             print("<h3>Getting data for: ".$id."&nbsp". $name."</h3>");
-            $this->player_data( $squad_name,$team_id, $id, $name, $entityManager);
+            $this->player_data( $squad_name,$team_id, $id, $name);
         }
         return new Response("Ram");
     }
 
-    /**
-     * @Route ("/player-data/{squad_name}/{id}/{name}")
-     * @param $squad_name
-     * @param $team_id
-     * @param $id
-     * @param $name
-     * @param $entityManager
-     * @return Response
-     */
-    public function player_data($squad_name,$team_id, $id, $name, $entityManager){
+    public function player_data($squad_name,$team_id, $id, $name){
         $client= new Client();
         $link= sprintf('https://www.iplt20.com/teams/%s/squad/%s/%s',$squad_name,$id,$name);
         echo sprintf("<a href=%s>%s</a><br>", $link, $link);
@@ -91,11 +88,10 @@ class HomeController extends AbstractController
             $player_name=$node->text();
         });
         print("<br>");
-        $repository= $entityManager->getRepository(PlayersData::class);
 
         $new_data=true;
 
-        $player= $repository->findOneBy(['player_id'=>$id]);
+        $player= $this->playersRepository->findOneBy(['player_id'=>$id]);
         if($player!=null){
             $new_data=false;
             echo "Player's data already exists<br>";
@@ -114,9 +110,7 @@ class HomeController extends AbstractController
         $data=$crawler->filter('.player-stats-table__highlight');
         if(count($data)==0){
             echo "<h4>Data not found for ".$name."</h4>";
-            $entityManager->persist($player);
-
-            $entityManager->flush();
+            $this->playersRepository->saveRecord($player);
             echo"</div>";
             return new Response("Ram");
         }
@@ -134,6 +128,8 @@ class HomeController extends AbstractController
                 print("4s: ". $bat_data[10]."<br>");
                 print("6s: ". $bat_data[11]."<br>");
                 print("Catches: ". $bat_data[12]."<br>");
+
+//  TODO IDEALLY  Rigorous Get and Set methods should be implemented in Repository instead. Would be done so in future code refactoring.
 
                 $player->setMatches($bat_data[1])
                     ->setNotOuts($bat_data[2])
@@ -165,9 +161,7 @@ class HomeController extends AbstractController
             print($i. "\t". $node->text(). "<br>");
         });
 
-        $entityManager->persist($player);
-
-        $entityManager->flush();
+        $this->playersRepository->saveRecord($player);
 
         echo"</div>";
 
@@ -179,9 +173,6 @@ class HomeController extends AbstractController
         return new Response("Ram");
     }
 
-    /**
-     * @Route("/data")
-     */
     public function data_page(){
         $client= new Client();
         $link='https://www.iplt20.com/teams';

@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\PlayersData;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -14,9 +15,16 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class PlayersDataRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
+    private $manager;
+    public function __construct(ManagerRegistry $registry, EntityManagerInterface $manager)
     {
         parent::__construct($registry, PlayersData::class);
+        $this->manager= $manager;
+    }
+
+    public function saveRecord(PlayersData $playersData){
+        $this->manager->persist($playersData);
+        $this->manager->flush();
     }
 
     public function getFinalRowId(){
