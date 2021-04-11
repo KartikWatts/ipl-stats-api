@@ -16,7 +16,6 @@ class HomeController extends AbstractController
 {
     private $playersRepository;
     private $secretRepository;
-    private $manager;
 
     public function __construct(PlayersDataRepository $playersRepository, SecretKeysRepository $secretRepository){
         $this->playersRepository= $playersRepository;
