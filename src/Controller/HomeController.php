@@ -33,6 +33,8 @@ class HomeController extends AbstractController
 
     /**
      * @Route ("/update-data")
+     * @param EntityManagerInterface $entityManager
+     * @return Response
      */
     public function update_data(EntityManagerInterface $entityManager){
         foreach ($this->teams as $team) {
@@ -46,6 +48,11 @@ class HomeController extends AbstractController
 
     /**
      * @Route ("/team-info/{team_link}/{team-name}")
+     * @param $team_link
+     * @param $team_id
+     * @param $team_name
+     * @param $entityManager
+     * @return Response
      */
     public function team_page($team_link, $team_id, $team_name, $entityManager){
         $link= $team_link;
@@ -65,6 +72,12 @@ class HomeController extends AbstractController
 
     /**
      * @Route ("/player-data/{squad_name}/{id}/{name}")
+     * @param $squad_name
+     * @param $team_id
+     * @param $id
+     * @param $name
+     * @param $entityManager
+     * @return Response
      */
     public function player_data($squad_name,$team_id, $id, $name, $entityManager){
         $client= new Client();
@@ -94,9 +107,9 @@ class HomeController extends AbstractController
             ->setTeamId(intval($team_id))
             ->setPlayerName($player_name)
             ->setImageUrl($image_url);
-        ;
 
-        echo "<div style='display:flex; flex-direction:row; align-self:center; justify-content:start '><img src='".$image_url."'/>";
+
+        echo "<div style='display:flex; flex-direction:row; align-self:center; justify-content:start '><img src='".$image_url."' alt='".$player_name."'/>";
 
         $data=$crawler->filter('.player-stats-table__highlight');
         if(count($data)==0){
