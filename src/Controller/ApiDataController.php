@@ -202,8 +202,9 @@ class ApiDataController extends AbstractController
         if($admin_data){
             $start_range=0;
             $data_count= $last_row;
-            if($origin!="https://iplt20-stats.herokuapp.com"){
-                return new JsonResponse("Secret-key not allowed for this origin.", Response::HTTP_FORBIDDEN);
+            // Allowing localhost for debug
+            if($origin!="https://iplt20-stats.herokuapp.com" || $origin!="https://127.0.0.1"){
+                return new JsonResponse("Key not allowed for the origin.", Response::HTTP_FORBIDDEN);
             }
         }
 
