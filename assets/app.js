@@ -1,16 +1,19 @@
 import React from "react";
 import ReactDOM from "react-dom";
-// import Intro from "./components/Intro";
-// import Navbar from "./components/Navbar";
-// import SelectionBar from "./containers/SelectionBar";
+import Intro from "./components/Intro";
+import Navbar from "./components/Navbar";
+import SelectionBar from "./containers/SelectionBar";
 
 import "./styles/app.css";
 
 const App = () => {
-	console.log(process.env);
-	return <>{/* <Navbar />
+	return (
+		<>
+			<Navbar />
 			<Intro />
-			<SelectionBar /> */}</>;
+			<SelectionBar />
+		</>
+	);
 };
 
 ReactDOM.render(<App />, document.getElementById("root"));

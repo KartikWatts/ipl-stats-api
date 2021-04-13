@@ -1,10 +1,22 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <meta http-equiv="content-language" content="en">
         <meta charset="UTF-8">
-        <title>{% block title %}Welcome!{% endblock %}</title>
-        {# Run `composer require symfony/webpack-encore-bundle`
-           and uncomment the following Encore helpers to start using Symfony UX #}
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="keywords" content="ipl, t20, api, data, stats">
+        <meta name="author" content="Kartik Arora">
+        <meta name="publisher" content="Kartik Arora">
+        <meta name="copyright" content="Kartik Arora">
+        <meta name="description" content="Unofficial data api for IPL T20 statistics.">
+        <meta name="page-topic" content="Data">
+        <meta name="page-type" content="Statistics">
+        <meta name="audience" content="Everyone">
+        <meta name="robots" content="index, follow">
+        <meta name="theme-color" content="#4d82ff" />
+        <link rel="shortcut icon" href="{{asset('images/favicon.ico')}}" />
+        
+        <title>{% block title %}IPL T20 Stats API{% endblock %}</title>
         {% block stylesheets %}
             {{ encore_entry_link_tags('app') }}
         {% endblock %}
