@@ -10,6 +10,7 @@ import img6 from "../images/6.png";
 import img8 from "../images/8.png";
 import img9 from "../images/9.png";
 import img62 from "../images/62.png";
+import DataTable from "../components/DataTable";
 
 let link = "https://iplt20-stats.herokuapp.com";
 let url1 = `${link}/api/squads-list`;
@@ -138,6 +139,7 @@ const SelectionBar = () => {
 				{squadData}
 			</section>
 			{playersTotalData}
+			<DataTable />
 		</>
 	);
 };
