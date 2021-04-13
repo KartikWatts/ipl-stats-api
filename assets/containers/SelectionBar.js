@@ -139,6 +139,7 @@ const SelectionBar = () => {
 				{squadData}
 			</section>
 			{playersTotalData}
+			<div className="data-head">Data for All</div>
 			<DataTable />
 		</>
 	);

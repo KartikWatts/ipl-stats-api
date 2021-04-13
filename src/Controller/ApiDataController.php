@@ -203,7 +203,7 @@ class ApiDataController extends AbstractController
             $start_range=0;
             $data_count= $last_row;
             // Allowing localhost for debug
-            if($origin!="https://iplt20-stats.herokuapp.com" && $origin!="https://127.0.0.1:8000/"){
+            if($origin!="https://iplt20-stats.herokuapp.com" && $origin!="https://127.0.0.1:8000"){
                 return new JsonResponse("Key not allowed for the origin.", Response::HTTP_FORBIDDEN);
             }
         }
