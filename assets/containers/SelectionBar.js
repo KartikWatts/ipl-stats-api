@@ -76,38 +76,36 @@ const SelectionBar = () => {
 			</div>
 		);
 	} else if (isLoaded == 2) {
-		squadData = "Oops! couldn't load data";
+		squadData = <h2>Oops! couldn't load data. Something went wrong.</h2>;
 	}
 
-	const getSquadData = () => {
-		fetch(url1)
-			.then((response) => response.json())
-			.then((data) => {
-				setIsLoaded(1);
-				setTeamData(data);
-			})
-			.catch((error) => {
-				setIsLoaded(2);
-			});
+	const getSquadData = async () => {
+		let response = await fetch(url1);
+		if (response.status == 200) {
+			setIsLoaded(1);
+			let resJSON = await response.json();
+			setTeamData(resJSON);
+		} else {
+			setIsLoaded(2);
+		}
 	};
 
-	const getPlayersData = () => {
-		fetch(url2, {
+	const getPlayersData = async () => {
+		let response = await fetch(url2, {
 			method: "POST",
 			cache: "no-cache",
 			headers: {
 				"Content-Type": "application/json",
 			},
 			body: JSON.stringify({ secret_key: "ramramram" }),
-		})
-			.then((response) => response.json())
-			.then((data) => {
-				setIsPlayersLoaded(1);
-				setPlayersData(data);
-			})
-			.catch((error) => {
-				setIsPlayersLoaded(2);
-			});
+		});
+		if (response.status == 200) {
+			setIsPlayersLoaded(1);
+			let resJSON = await response.json();
+			setPlayersData(resJSON);
+		} else {
+			setIsPlayersLoaded(2);
+		}
 	};
 
 	let playersTotalData = (
@@ -118,8 +116,10 @@ const SelectionBar = () => {
 
 	if (isPlayersLoaded == 1) {
 		playersTotalData = <div>LOADED</div>;
-	} else if (isLoaded == 2) {
-		playersTotalData = "Oops! couldn't load data";
+	} else if (isPlayersLoaded == 2) {
+		playersTotalData = (
+			<h2>Oops! couldn't load data. Something went wrong.</h2>
+		);
 	}
 
 	useEffect(() => {
