@@ -54,17 +54,6 @@ class ApiDataController extends AbstractController
             array_push($data, $arr);
         }
 
-        if (array_key_exists('HTTP_ORIGIN', $_SERVER)) {
-            $origin = $_SERVER['HTTP_ORIGIN'];
-        }
-        else if (array_key_exists('HTTP_REFERER', $_SERVER)) {
-            $origin = $_SERVER['HTTP_REFERER'];
-        } else {
-            $origin = $_SERVER['REMOTE_ADDR'];
-        }
-
-        die($origin);
-
         return new JsonResponse($data, Response::HTTP_OK);
     }
 
@@ -199,10 +188,23 @@ class ApiDataController extends AbstractController
             $data_count= $last_row-$start_range;
         }
 
+        $origin=null;
+        if (array_key_exists('HTTP_ORIGIN', $_SERVER)) {
+            $origin = $_SERVER['HTTP_ORIGIN'];
+        }
+        else if (array_key_exists('HTTP_REFERER', $_SERVER)) {
+            $origin = $_SERVER['HTTP_REFERER'];
+        } else {
+            $origin = $_SERVER['REMOTE_ADDR'];
+        }
+
         $admin_data= $this->secretRepository->findOneBy(['secret_key'=>$secret_key]);
         if($admin_data){
             $start_range=0;
             $data_count= $last_row;
+            if($origin!="https://iplt20-stats.herokuapp.com"){
+                return new JsonResponse("Secret-key not allowed for this origin.", Response::HTTP_FORBIDDEN);
+            }
         }
 
         $players=$this->playerRepository->findPlayersInRange($start_range, $data_count);
