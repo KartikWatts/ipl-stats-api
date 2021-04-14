@@ -25,15 +25,16 @@ const Intro = () => {
 				</p>
 				<p className="intro-emp">
 					{" "}
-					Api docs are hosted using{" "}
-					<a target="_blank" href="https://www.postman.com/">
-						Postman
-					</a>{" "}
-					as it is convenient. Learn more about the actual api docs
-					here: <a>To be uploaded</a>
+					Api docs are hosted with Postman. Learn more about the
+					actual api docs here: <a>To be uploaded</a>
 				</p>
 				<p className="intro-emp">
-					Here you can visualize and play with the data.
+					Here you can visualize and the data by selecting and sorting
+					as desired (every combination of record is possible in the
+					table below).
+					<span className="only-on-mobile">
+						You can rotate the mobile to landscape for better view.
+					</span>
 				</p>
 			</div>
 		</section>
