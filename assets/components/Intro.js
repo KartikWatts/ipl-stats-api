@@ -13,17 +13,24 @@ const Intro = () => {
 					<br />
 					The api is developed by scraping data from official website
 					of{" "}
-					<a href="https://www.iplt20.com">https://www.iplt20.com</a>,
-					and is latest by the statistics available there. The data is{" "}
-					<a href="https://www.iplt20.com">https://www.iplt20.com</a>{" "}
+					<a target="_blank" href="https://www.iplt20.com">
+						https://www.iplt20.com
+					</a>
+					, and is latest by the statistics available there. The data
+					is{" "}
+					<a target="_blank" href="https://www.iplt20.com">
+						https://www.iplt20.com
+					</a>{" "}
 					property and all rights reserved with them.
 				</p>
 				<p className="intro-emp">
 					{" "}
 					Api docs are hosted using{" "}
-					<a href="https://www.postman.com/">Postman</a> as it is
-					convenient. Learn more about the actual api docs here:{" "}
-					<a>To be uploaded</a>
+					<a target="_blank" href="https://www.postman.com/">
+						Postman
+					</a>{" "}
+					as it is convenient. Learn more about the actual api docs
+					here: <a>To be uploaded</a>
 				</p>
 				<p className="intro-emp">
 					Here you can visualize and play with the data.

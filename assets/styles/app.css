@@ -19,6 +19,11 @@ p {
 	word-spacing: 0.15rem;
 }
 
+p > a {
+	text-decoration: none;
+	color: var(--blue);
+}
+
 .nav {
 	width: 100vw;
 	background: var(--blue);
@@ -146,7 +151,15 @@ p {
 
 .data-head {
 	width: 100%;
+	margin-top: 3rem;
 	text-align: center;
+	font-weight: bold;
+	font-size: 1.2rem;
+}
+
+.data-head__emp {
+	font-size: 1.5rem;
+	color: var(--blue);
 }
 
 @media only screen and (max-width: 1024px) {
@@ -235,6 +248,10 @@ p {
 	.squad-img {
 		max-height: 4rem;
 		display: inline-block;
+	}
+	.data-head {
+		margin: 0;
+		padding: 1rem 1rem;
 	}
 }
 

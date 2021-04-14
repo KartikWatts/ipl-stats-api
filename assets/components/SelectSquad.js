@@ -1,10 +1,10 @@
 import React from "react";
 
-const SelectSquad = ({ squad, img, name, onClick, selectedIndex }) => {
+const SelectSquad = ({ squad, img, name, onClick, selectedIndex, index }) => {
 	let comp = (
 		<div
 			className={`squad-select squad-text ${
-				selectedIndex === 0 ? "selected" : null
+				selectedIndex === -1 ? "selected" : null
 			}`}
 			onClick={onClick}
 		>
@@ -15,7 +15,7 @@ const SelectSquad = ({ squad, img, name, onClick, selectedIndex }) => {
 		comp = (
 			<img
 				className={`squad-select squad-img ${
-					selectedIndex == squad ? "selected" : null
+					selectedIndex == index ? "selected" : null
 				}`}
 				src={img}
 				alt={name}

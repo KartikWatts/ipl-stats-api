@@ -10,7 +10,7 @@ import img6 from "../images/6.png";
 import img8 from "../images/8.png";
 import img9 from "../images/9.png";
 import img62 from "../images/62.png";
-import DataTable from "../components/DataTable";
+import DataView from "../components/DataView";
 
 let link = "https://iplt20-stats.herokuapp.com";
 let url1 = `${link}/api/squads-list`;
@@ -43,7 +43,7 @@ const getImg = (id) => {
 const SelectionBar = () => {
 	const [isLoaded, setIsLoaded] = useState(0);
 	const [teamData, setTeamData] = useState(null);
-	const [selectedPointer, setSelectedPointer] = useState(0);
+	const [selectedPointer, setSelectedPointer] = useState(-1);
 
 	const [isPlayersLoaded, setIsPlayersLoaded] = useState(0);
 	const [playersData, setPlayersData] = useState(null);
@@ -62,14 +62,15 @@ const SelectionBar = () => {
 		squadData = (
 			<div className="squad-list">
 				{teamData &&
-					teamData.map((data) => {
+					teamData.map((data, i) => {
 						return (
 							<SelectSquad
 								key={data.id}
 								squad={data.id}
+								index={i}
 								img={getImg(data.id)}
 								name={data.name}
-								onClick={() => getSelected(data.id)}
+								onClick={() => getSelected(i)}
 								selectedIndex={selectedPointer}
 							/>
 						);
@@ -77,7 +78,7 @@ const SelectionBar = () => {
 			</div>
 		);
 	} else if (isLoaded == 2) {
-		squadData = <h2>Oops! couldn't load data. Something went wrong.</h2>;
+		squadData = <h3>Oops! couldn't load data. Something went wrong.</h3>;
 	}
 
 	const getSquadData = async () => {
@@ -103,7 +104,8 @@ const SelectionBar = () => {
 		if (response.status == 200) {
 			setIsPlayersLoaded(1);
 			let resJSON = await response.json();
-			setPlayersData(resJSON);
+			let filteredData = resJSON.filter((item) => item.matches != null);
+			setPlayersData(filteredData);
 		} else {
 			setIsPlayersLoaded(2);
 		}
@@ -116,11 +118,17 @@ const SelectionBar = () => {
 	);
 
 	if (isPlayersLoaded == 1) {
-		playersTotalData = <div>LOADED</div>;
+		if (selectedPointer === -1) {
+			playersTotalData = <span className="data-head__emp">All</span>;
+		} else {
+			playersTotalData = (
+				<span className="data-head__emp">
+					{teamData[selectedPointer]["name"]}
+				</span>
+			);
+		}
 	} else if (isPlayersLoaded == 2) {
-		playersTotalData = (
-			<h2>Oops! couldn't load data. Something went wrong.</h2>
-		);
+		playersTotalData = "Oops! couldn't load data. Something went wrong.";
 	}
 
 	useEffect(() => {
@@ -133,14 +141,25 @@ const SelectionBar = () => {
 			<section className="selection-bar">
 				<SelectSquad
 					squad="ALL"
-					onClick={() => getSelected(0)}
+					onClick={() => getSelected(-1)}
 					selectedIndex={selectedPointer}
 				/>
 				{squadData}
 			</section>
-			{playersTotalData}
-			<div className="data-head">Data for All</div>
-			<DataTable />
+			<div className="data-head">
+				{isPlayersLoaded == 1 && "Data for"} {playersTotalData}
+			</div>
+			{playersData && (
+				<DataView
+					data={playersData}
+					teamData={teamData}
+					id={
+						selectedPointer != -1
+							? teamData[selectedPointer]["id"]
+							: 0
+					}
+				/>
+			)}
 		</>
 	);
 };
