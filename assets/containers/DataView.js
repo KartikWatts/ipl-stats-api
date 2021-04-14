@@ -2,6 +2,7 @@ import React, { useEffect, useMemo, useState } from "react";
 import DataTable from "react-data-table-component";
 import { playerColumns, customStyles, activeName } from "../helpers/columns";
 import FilterComponent from "../components/FilterComponent";
+import PlayerCard from "../components/PlayerCard";
 
 const DataView = ({ data, teamData, id }) => {
 	const [listData, setListData] = useState(data);
@@ -144,6 +145,8 @@ const DataView = ({ data, teamData, id }) => {
 				sortServer
 				subHeaderComponent={<FilterComponent />}
 				onRowClicked={(e) => getPlayerName(e)}
+				expandableRows
+				expandableRowsComponent={<PlayerCard />}
 			/>
 			{name}
 		</div>

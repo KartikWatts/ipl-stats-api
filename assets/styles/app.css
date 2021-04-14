@@ -30,7 +30,7 @@ p > a {
 }
 
 p > a:hover {
-	color: var(--violet);
+	color: var(--red);
 }
 
 .only-on-mobile {
@@ -201,6 +201,63 @@ p > a:hover {
 	color: var(--blue);
 }
 
+.player-card {
+	display: flex;
+	padding: 1rem 1rem;
+	background: #fdfdfd;
+}
+
+.player-card__image {
+	max-height: 20rem;
+}
+.player-card__image2 {
+	max-height: 18rem;
+	padding: 0 1.5rem;
+}
+
+.card-data {
+	max-width: 70vw;
+	display: flexbox;
+	flex-direction: column;
+}
+
+.card-head {
+	font-size: 2.5rem;
+	color: var(--blue);
+	border-bottom: 2px solid #3b3b3b;
+	border-radius: 2px;
+	padding-bottom: 0.5rem;
+}
+
+.card-head__team {
+	font-size: 1.5rem;
+	color: black;
+}
+
+.card-body {
+	padding-top: 1rem;
+	display: flex;
+	gap: 5rem;
+}
+
+.card-body__row {
+	display: flex;
+	flex-direction: column;
+	gap: 1.5rem;
+}
+
+.body-row__data {
+	font-weight: bold;
+	font-size: 1.2rem;
+	color: var(--red);
+}
+
+.body-row__value {
+	font-weight: bold;
+	font-size: 1.1rem;
+	padding-left: 0.1rem;
+}
+
 .footer {
 	position: absolute;
 	bottom: 0;
@@ -322,6 +379,9 @@ p > a:hover {
 	.data-head {
 		margin: 0;
 		padding: 1rem 1rem;
+	}
+	.player-card__image {
+		max-height: 12rem;
 	}
 	.footer {
 		padding: 0.5rem 0.5rem;
