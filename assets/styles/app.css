@@ -309,6 +309,40 @@ p > a:hover {
 		width: 0px; /* Remove scrollbar space */
 		background: transparent; /* Optional: just make scrollbar invisible */
 	}
+	.player-card {
+		padding: 1rem 0.2rem;
+	}
+
+	.player-card__image {
+		max-height: 16rem;
+	}
+	.player-card__image2 {
+		max-height: 16rem;
+		padding: 0 2rem;
+	}
+
+	.card-data {
+		max-width: 80vw;
+	}
+
+	.card-head {
+		font-size: 2rem;
+		color: var(--blue);
+		padding-bottom: 0.5rem;
+	}
+
+	.card-head__team {
+		font-size: 1.2rem;
+	}
+
+	.card-body {
+		padding-top: 1rem;
+		gap: 3rem;
+	}
+
+	.card-body__row {
+		gap: 1.2rem;
+	}
 }
 
 @media only screen and (max-width: 600px) {
@@ -380,9 +414,55 @@ p > a:hover {
 		margin: 0;
 		padding: 1rem 1rem;
 	}
-	.player-card__image {
-		max-height: 12rem;
+	.player-card {
+		padding: 0.5rem 0.2rem;
 	}
+	.player-card__image {
+		max-height: 11rem;
+		position: relative;
+		left: -20px;
+	}
+	.player-card__image2 {
+		max-height: 10rem;
+		padding: 0 0 0 1.2rem;
+	}
+
+	.card-data {
+		max-width: 150vw;
+		position: relative;
+		left: -15px;
+	}
+
+	.card-head {
+		font-size: 1.3rem;
+		color: var(--blue);
+		border-bottom: 1px solid #3b3b3b;
+		border-radius: 2px;
+		padding-bottom: 0.2rem;
+	}
+
+	.card-head__team {
+		font-size: 1.1rem;
+	}
+
+	.card-body {
+		padding-top: 0.5rem;
+		gap: 1rem;
+	}
+
+	.card-body__row {
+		gap: 0.5rem;
+	}
+
+	.body-row__data {
+		font-size: 1.1rem;
+		color: var(--red);
+	}
+
+	.body-row__value {
+		font-size: 1rem;
+	}
+
 	.footer {
 		padding: 0.5rem 0.5rem;
 	}

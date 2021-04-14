@@ -11,7 +11,6 @@ const CardData = ({ data, value }) => {
 };
 
 const PlayerCard = ({ data }) => {
-	console.log(data);
 	return (
 		<div className="player-card">
 			<object
