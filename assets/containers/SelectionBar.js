@@ -10,7 +10,7 @@ import img6 from "../images/6.png";
 import img8 from "../images/8.png";
 import img9 from "../images/9.png";
 import img62 from "../images/62.png";
-import DataView from "../components/DataView";
+import DataView from "./DataView";
 
 let link = "https://iplt20-stats.herokuapp.com";
 let url1 = `${link}/api/squads-list`;
@@ -99,7 +99,9 @@ const SelectionBar = () => {
 			headers: {
 				"Content-Type": "application/json",
 			},
-			body: JSON.stringify({ secret_key: "ramramram" }),
+			body: JSON.stringify({
+				key: "c0c1447415ce243a0bb2dc72e632b893",
+			}),
 		});
 		if (response.status == 200) {
 			setIsPlayersLoaded(1);

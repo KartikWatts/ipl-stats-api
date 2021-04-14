@@ -168,8 +168,8 @@ class ApiDataController extends AbstractController
             $start_range = $post_data['start_range'];
         if(isset($post_data['data_count']))
             $data_count = $post_data['data_count'];
-        if(isset($post_data['secret_key']))
-            $secret_key= $post_data['secret_key'];
+        if(isset($post_data['key']))
+            $secret_key= $post_data['key'];
 
         if(!is_int($start_range) || !is_int($data_count)){
             return new JsonResponse("Range should only be in integers.", Response::HTTP_FORBIDDEN);

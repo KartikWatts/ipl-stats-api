@@ -1,66 +1,14 @@
-import { nominalTypeHack } from "prop-types";
 import React, { useEffect, useMemo, useState } from "react";
-import DataTable, { defaultThemes } from "react-data-table-component";
-import { playerColumns } from "../helpers/columns";
+import DataTable from "react-data-table-component";
+import { playerColumns, customStyles, activeName } from "../helpers/columns";
+import FilterComponent from "../components/FilterComponent";
 
 const DataView = ({ data, teamData, id }) => {
-	// console.log(data);
 	const [listData, setListData] = useState(data);
 	const [loading, setLoading] = useState(true);
 	const [playerName, setPlayerName] = useState(null);
-
-	const customStyles = {
-		headRow: {
-			style: {
-				borderTopStyle: "solid",
-				borderTopWidth: "1px",
-				borderTopColor: defaultThemes.default.divider.default,
-				background: "rgba(255,230,45,1)",
-			},
-		},
-		headCells: {
-			style: {
-				"&:not(:last-of-type)": {
-					borderRightStyle: "solid",
-					borderRightWidth: "1px",
-					fontSize: "15px",
-					borderRightColor: defaultThemes.default.divider.default,
-				},
-			},
-		},
-		cells: {
-			style: {
-				position: "relative",
-				userSelect: "none",
-				fontSize: "14px",
-				WebkitUserSelect: "none",
-				MsUserSelect: "none",
-				"&:nth-child(even)": {
-					background: "#e9ffb314",
-				},
-				"&:not(:last-of-type)": {
-					borderRightStyle: "solid",
-					borderRightWidth: "1px",
-					borderRightColor: defaultThemes.default.divider.default,
-				},
-			},
-		},
-		activeName: {
-			position: "fixed",
-			right: "30px",
-			bottom: "60px",
-			background: "#80808075",
-			zIndex: "2",
-			padding: "10px",
-			borderRadius: "10px",
-			userSelect: "none",
-			color: "rgb(0 64 214)",
-			fontSize: "0.8rem",
-			fontWeight: "bold",
-			transition: "all 0.2s",
-			opacity: playerName ? "1" : "0",
-		},
-	};
+	const [filterText, setFilterText] = useState("");
+	const [resetPaginationToggle, setResetPaginationToggle] = useState(false);
 
 	const handleSort = async (column, sortDirection) => {
 		setLoading(true);
@@ -137,7 +85,6 @@ const DataView = ({ data, teamData, id }) => {
 					teamName = teamName["name"];
 					newList[i].team_name = teamName;
 				}
-				// console.log(newList);
 				setListData(newList);
 				setLoading(false);
 			}
@@ -155,27 +102,47 @@ const DataView = ({ data, teamData, id }) => {
 		setLoading(false);
 	}, [id]);
 
-	let name = <div style={customStyles.activeName}>{playerName}</div>;
-
 	const columns = useMemo(() => playerColumns, []);
+
+	let name = <div style={activeName(playerName)}>{playerName}</div>;
+
+	const handleClear = () => {
+		if (filterText) {
+			setResetPaginationToggle(!resetPaginationToggle);
+			setFilterText("");
+		}
+	};
+	const filteredItems = data.filter(
+		(item) =>
+			item.player_name &&
+			item.player_name.toLowerCase().includes(filterText.toLowerCase())
+	);
 
 	return (
 		<>
+			<FilterComponent
+				onFilter={(e) => setFilterText(e.target.value)}
+				onClear={handleClear}
+				filterText={filterText}
+			/>
 			<DataTable
 				columns={columns}
-				data={listData}
+				data={filterText.length == 0 ? listData : filteredItems}
 				keyField="player_id"
+				noHeader
 				striped
 				highlightOnHover
 				pointerOnHover
-				// defaultSortField="player_name"
+				defaultSortField="player_name"
 				fixedHeader
 				customStyles={customStyles}
 				pagination
+				paginationResetDefaultPage={resetPaginationToggle}
 				progressPending={loading}
 				persistTableHead
 				onSort={handleSort}
 				sortServer
+				subHeaderComponent={<FilterComponent />}
 				onRowClicked={(e) => getPlayerName(e)}
 			/>
 			{name}
