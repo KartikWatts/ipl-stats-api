@@ -119,7 +119,7 @@ const DataView = ({ data, teamData, id }) => {
 	);
 
 	return (
-		<>
+		<div>
 			<FilterComponent
 				onFilter={(e) => setFilterText(e.target.value)}
 				onClear={handleClear}
@@ -146,7 +146,7 @@ const DataView = ({ data, teamData, id }) => {
 				onRowClicked={(e) => getPlayerName(e)}
 			/>
 			{name}
-		</>
+		</div>
 	);
 };
 
