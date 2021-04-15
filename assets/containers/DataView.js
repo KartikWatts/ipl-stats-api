@@ -10,6 +10,7 @@ const DataView = ({ data, teamData, id }) => {
 	const [playerName, setPlayerName] = useState(null);
 	const [filterText, setFilterText] = useState("");
 	const [resetPaginationToggle, setResetPaginationToggle] = useState(false);
+	const [expand, setExpand] = useState(false);
 
 	const handleSort = async (column, sortDirection) => {
 		setLoading(true);
@@ -119,12 +120,15 @@ const DataView = ({ data, teamData, id }) => {
 			item.player_name.toLowerCase().includes(filterText.toLowerCase())
 	);
 
+	const onHandleExpand = () => setExpand(!expand);
+
 	return (
 		<div>
 			<FilterComponent
 				onFilter={(e) => setFilterText(e.target.value)}
 				onClear={handleClear}
 				filterText={filterText}
+				handleExpand={onHandleExpand}
 			/>
 			<DataTable
 				columns={columns}
@@ -146,6 +150,7 @@ const DataView = ({ data, teamData, id }) => {
 				subHeaderComponent={<FilterComponent />}
 				onRowClicked={(e) => getPlayerName(e)}
 				expandableRows
+				expandOnRowClicked={expand}
 				expandableRowsComponent={<PlayerCard />}
 			/>
 			{name}

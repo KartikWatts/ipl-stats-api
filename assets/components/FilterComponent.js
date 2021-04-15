@@ -1,7 +1,16 @@
 import React from "react";
-import { ClearButton, FilterBar, SearchBar, TextField } from "./UIComponents";
+import {
+	CheckBox,
+	CheckBoxBar,
+	CheckBoxLabel,
+	CheckBoxWrapper,
+	ClearButton,
+	FilterBar,
+	SearchBar,
+	TextField,
+} from "./UIComponents";
 
-const FilterComponent = ({ filterText, onFilter, onClear }) => (
+const FilterComponent = ({ filterText, onFilter, onClear, handleExpand }) => (
 	<FilterBar>
 		<SearchBar>
 			<TextField
@@ -17,13 +26,13 @@ const FilterComponent = ({ filterText, onFilter, onClear }) => (
 				X
 			</ClearButton>
 		</SearchBar>
-		{/* <CheckBoxBar>
-			<div> Show balling stats first</div>
-			<CheckBoxWrapper onChange={onOrderChange}>
+		<CheckBoxBar>
+			<div> Show card on row click: </div>
+			<CheckBoxWrapper onChange={handleExpand}>
 				<CheckBox id="checkbox" type="checkbox" />
 				<CheckBoxLabel htmlFor="checkbox" />
 			</CheckBoxWrapper>
-		</CheckBoxBar> */}
+		</CheckBoxBar>
 	</FilterBar>
 );
 
