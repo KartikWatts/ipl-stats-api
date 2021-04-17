@@ -1,10 +1,21 @@
 import React from "react";
 import noPic from "../images/no-photo.png";
 
-const CardData = ({ data, value }) => {
+const CardData = ({ data, value, mobData }) => {
 	return (
 		<div>
-			<span className="body-row__data">{data}: </span>
+			{!mobData ? (
+				<span className="body-row__data">{data}: </span>
+			) : (
+				<>
+					<span className="body-row__data not-on-mobile">
+						{data}:{" "}
+					</span>
+					<span className="body-row__data only-on-mobile">
+						{mobData}:
+					</span>
+				</>
+			)}
 			<span className="body-row__value">{value}</span>
 		</div>
 	);
@@ -36,9 +47,14 @@ const PlayerCard = ({ data }) => {
 						<CardData data="Highest" value={data.highest_score} />
 						<CardData
 							data="Bat Average"
+							mobData="Bat Avg"
 							value={data.batting_average}
 						/>
-						<CardData data="Strike Rate" value={data.strike_rate} />
+						<CardData
+							data="Strike Rate"
+							mobData="Str Rt"
+							value={data.strike_rate}
+						/>
 					</div>
 					<div className="card-body__row">
 						<CardData data="Hundreds" value={data.hundreds} />
@@ -52,6 +68,7 @@ const PlayerCard = ({ data }) => {
 						<CardData data="Wickets" value={data.wickets} />
 						<CardData
 							data="Bowl Average"
+							mobData="Bowl Avg"
 							value={data.bowling_average}
 						/>
 						<CardData data="Economy" value={data.economy} />

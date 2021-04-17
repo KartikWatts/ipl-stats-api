@@ -24,7 +24,7 @@ const Footer = () => {
 			<div>
 				Developed with ❤️ by
 				<a href="https://github.com/KartikWatts/ipl-stats-api">
-					Kartik Arora
+					Kartik Watts
 				</a>
 			</div>
 		</footer>
