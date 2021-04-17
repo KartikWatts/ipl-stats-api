@@ -246,15 +246,15 @@ class ApiDataController extends AbstractController
         if($sort_attr) {
             $sql=null;
             if($sort_attr=="highest"){
-                $sql = sprintf("SELECT * FROM players_data P WHERE P.highest IS NOT NULL AND P.highest!='-' ORDER BY TO_NUMBER(P.highest, '999') %s OFFSET %s LIMIT %s;",$order, $start_range, $data_count);
+                $sql = sprintf("SELECT * FROM players_data P WHERE P.highest IS NOT NULL AND (P.highest!='-') ORDER BY TO_NUMBER(P.highest, '999') %s OFFSET %s LIMIT %s;",$order, $start_range, $data_count);
             }
             else if($sort_attr=="batting_average" || $sort_attr=="bowling_average" ||$sort_attr=="strike_rate" || $sort_attr=="economy"){
                 if($sort_attr=="bowling_average")
                     $sort_attr="average";
-                $sql= sprintf("SELECT * FROM players_data p WHERE P.%s IS NOT NULL AND P.%s!='-' ORDER BY CAST(P.%s AS DOUBLE PRECISION) %s OFFSET %s LIMIT %s;",$sort_attr, $sort_attr, $sort_attr, $order,$start_range, $data_count);
+                $sql= sprintf("SELECT * FROM players_data p WHERE P.%s IS NOT NULL AND (P.%s!='-') ORDER BY CAST(P.%s AS DOUBLE PRECISION) %s OFFSET %s LIMIT %s;",$sort_attr, $sort_attr, $sort_attr, $order,$start_range, $data_count);
             }
             else if($sort_attr=="matches" || $sort_attr=="not_outs" || $sort_attr=="runs" || $sort_attr=="hundreds" || $sort_attr=="fifties" || $sort_attr=="sixes" || $sort_attr=="catches" || $sort_attr=="overs" || $sort_attr=="wickets" || $sort_attr=="four_wickets") {
-                $sql= sprintf("SELECT * FROM players_data p WHERE P.%s IS NOT NULL AND P.%s!='-' ORDER BY CAST(P.%s AS INTEGER) %s OFFSET %s LIMIT %s;",$sort_attr, $sort_attr, $sort_attr, $order,$start_range, $data_count);
+                $sql= sprintf("SELECT * FROM players_data p WHERE P.%s IS NOT NULL AND (P.%s!='-') ORDER BY CAST(P.%s AS INTEGER) %s OFFSET %s LIMIT %s;",$sort_attr, $sort_attr, $sort_attr, $order,$start_range, $data_count);
             }
             else{
                 return new JsonResponse("Sort Attribute is Invalid.", Response::HTTP_BAD_REQUEST);
