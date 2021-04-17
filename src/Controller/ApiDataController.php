@@ -69,10 +69,10 @@ class ApiDataController extends AbstractController
 
         if(!ctype_digit($id)){
             $payload=[
-                'error'=>"403",
+                'error'=>"400",
                 'message'=>"Only integer value accepted for id."
             ];
-            return new JsonResponse($payload, Response::HTTP_FORBIDDEN);
+            return new JsonResponse($payload, Response::HTTP_BAD_REQUEST);
         }
 
         $squad_data=$this->teamsRepository->findOneBy(['team_id'=>$id]);
@@ -114,7 +114,7 @@ class ApiDataController extends AbstractController
 
     function get_data_array(PlayersData $player) :array{
         $data=[
-            'player_id'=> $player->getId(),
+            'player_id'=> $player->getPlayerId(),
             'player_name'=> $player->getPlayerName(),
             'team_id'=>$player->getTeamId(),
             'image_url'=> $player->getImageUrl(),
@@ -147,10 +147,10 @@ class ApiDataController extends AbstractController
 
         if(!ctype_digit($id)){
             $payload=[
-                'error'=>"403",
+                'error'=>"400",
                 'message'=>"Only integer value accepted for id."
             ];
-            return new JsonResponse($payload, Response::HTTP_FORBIDDEN);
+            return new JsonResponse($payload, Response::HTTP_BAD_REQUEST);
         }
 
         $player=$this->playerRepository->findOneBy(['player_id'=> intval($id)]);
@@ -177,7 +177,7 @@ class ApiDataController extends AbstractController
         $this->check_service_availability();
 
         if(!$request->isMethod('POST')){
-            return new JsonResponse("Method not allowed!", Response::HTTP_UNAUTHORIZED);
+            return new JsonResponse("Method not allowed!", Response::HTTP_METHOD_NOT_ALLOWED);
         }
 
         $post_data = json_decode($request->getContent(), true);
