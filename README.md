@@ -3,7 +3,7 @@
 [![IPL Stats](https://i.ibb.co/G2yFqsJ/ipl-1.png)](https://iplt20-stats.herokuapp.com)
 
 ## Whys
-<p>To get the statistics of all players in IPL. As needed such data for one of the project and there was no suitable api found for the purpose,
+<p>To get the statistics of all players in Indian Premier League. As needed such data for one of the project and there was no suitable api found for the purpose,
 so decided to create one, and as it was created, shared too, if required by anybody. The data is updated after each match.
 The api is developed by scraping data from official website of https://www.iplt20.com, and is latest by the statistics available there.
 The data is https://www.iplt20.com property and all rights reserved with them.</p>
@@ -17,6 +17,24 @@ Still, if you know more of the law and if it's alright to be so, contributions a
 (Please be patient for first load time, lazy dyno :zzz: needs some time to wake up :wink:).
 
 You can read docs and try the api here: https://documenter.getpostman.com/view/10557860/TzJsedV4
+
+## Run locally/ Contribute
+
+Follow these steps to run the code locally:
+1. Clone this repository.
+2. Run `composer install`
+3. Run `yarn install`
+4. Create a file called **.env.local** at the root of the project
+5. Add these environment variables in .env.local:
+   * `APP_ENV=dev`
+   * `DATABASE_URL="mysql://db_user:db_password@127.0.0.1:3306/db_name?serverVersion=5.7"`
+    Replace your database credentials here. [Reference](https://symfony.com/doc/current/the-fast-track/en/8-doctrine.html)
+6. Run these commands in terminal:
+   * `php bin/console make:migration`
+   * `php bin/console doctrine:migrations:migrate` If you get any error in some query while running the command. Manually comment out that query in migrations folder. This will setup the local database with all tables.
+7. Run `symfony serve -d`
+8. Run `yarn watch`
+9. The project will start running on the local server.
 
 ## Docs :: [Postman](https://documenter.getpostman.com/view/10557860/TzJsedV4)
 
