@@ -18,7 +18,10 @@ const Navbar = () => {
 					<a href="https://github.com/KartikWatts/ipl-stats-api">
 						<img className="nav-options__img" alt="Git" src={git} />
 					</a>
-					<a className="link">
+					<a
+						className="link"
+						href="https://documenter.getpostman.com/view/10557860/TzJsedV4"
+					>
 						<span className="not-on-mobile">View</span> Docs
 					</a>
 				</div>

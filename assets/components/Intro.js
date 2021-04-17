@@ -26,7 +26,10 @@ const Intro = () => {
 				<p className="intro-emp">
 					{" "}
 					Api docs are hosted with Postman. Learn more about the
-					actual api docs here: <a>To be uploaded</a>
+					actual api docs here:{" "}
+					<a href="https://documenter.getpostman.com/view/10557860/TzJsedV4">
+						Docs Link
+					</a>
 				</p>
 				<p className="intro-emp">
 					Here you can visualize and the data by selecting and sorting
