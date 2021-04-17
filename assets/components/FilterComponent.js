@@ -27,7 +27,7 @@ const FilterComponent = ({ filterText, onFilter, onClear, handleExpand }) => (
 			</ClearButton>
 		</SearchBar>
 		<CheckBoxBar>
-			<div> Show card on row click: </div>
+			<div> Show cards on row click: </div>
 			<CheckBoxWrapper onChange={handleExpand}>
 				<CheckBox id="checkbox" type="checkbox" />
 				<CheckBoxLabel htmlFor="checkbox" />

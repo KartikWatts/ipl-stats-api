@@ -252,12 +252,14 @@ p > a:hover {
 	font-weight: bold;
 	font-size: 1.2rem;
 	color: var(--red);
+	user-select: "none";
 }
 
 .body-row__value {
 	font-weight: bold;
 	font-size: 1.1rem;
 	padding-left: 0.1rem;
+	user-select: "none";
 }
 
 .footer {
