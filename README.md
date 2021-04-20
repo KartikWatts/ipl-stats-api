@@ -1,7 +1,6 @@
 # <p align="center"> IPL Stats API </p>
 #### <p align="center">Making access to IPL statistics easier with api calls :grinning:</p>
 [![IPL Stats](https://i.ibb.co/G2yFqsJ/ipl-1.png)](https://iplt20-stats.herokuapp.com) 
-![Badge](https://david-dm.org/KartikWatts/ipl-stats-api.svg)
 [![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](https://github.com/dwyl/esta/issues)
 
 ## Whys
