@@ -20,6 +20,7 @@ class ApiDataController extends AbstractController
     private $teamsRepository;
     private $secretRepository;
     private $squads_data;
+    private $LIMIT= 30;
 
     public function __construct(PlayersDataRepository $playerRepository, TeamsDataRepository $teamsRepository, SecretKeysRepository $secretRepository)
     {
@@ -182,10 +183,11 @@ class ApiDataController extends AbstractController
 
         $post_data = json_decode($request->getContent(), true);
         $start_range = 0;
-        $data_count = 25;
+        $data_count = $this->LIMIT;
         $secret_key="";
         $sort_attr=null;
         $order="desc";
+        $team_id=null;
 
         if(isset($post_data['start_range']))
             $start_range = $post_data['start_range'];
@@ -197,13 +199,19 @@ class ApiDataController extends AbstractController
             $sort_attr= $post_data['sort_attr'];
         if(isset($post_data['order']))
             $order= $post_data['order'];
+        if(isset($post_data['team_id']))
+            $team_id= $post_data['team_id'];
 
         if(!is_int($start_range) || !is_int($data_count)){
             return new JsonResponse("Range should only be in integers.", Response::HTTP_FORBIDDEN);
         }
 
-        if($data_count> 25)
-            $data_count= 25;
+        if($team_id && !is_int($team_id)){
+            return new JsonResponse("Team_Id should only be in integer.", Response::HTTP_FORBIDDEN);
+        }
+
+        if($data_count> $this->LIMIT)
+            $data_count= $this->LIMIT;
 
         $last_row=$this->playerRepository->getRowCount();
 
@@ -259,6 +267,13 @@ class ApiDataController extends AbstractController
             else{
                 return new JsonResponse("Sort Attribute is Invalid.", Response::HTTP_BAD_REQUEST);
             }
+
+            if($team_id){
+                $substr="ORDER BY";
+                $attachment="AND (team_id= ".$team_id.") ".$substr;
+                $sql= str_replace($substr, $attachment,$sql);
+            }
+
             $em = $this->getDoctrine()->getManager();
             $query = $em->getConnection()->prepare($sql);
             $query->execute();
@@ -276,8 +291,9 @@ class ApiDataController extends AbstractController
             }
             return new JsonResponse($data, Response::HTTP_OK);
         }
-        else
-            $players=$this->playerRepository->findPlayersInRange($start_range, $data_count);
+        else {
+            $players = $this->playerRepository->findPlayersInRange($start_range, $data_count, $team_id);
+        }
 
         $data=[];
         foreach ($players as $player) {

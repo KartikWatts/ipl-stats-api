@@ -42,12 +42,21 @@ class PlayersDataRepository extends ServiceEntityRepository
         return count($q->getScalarResult());
     }
 
-    public function findPlayersInRange($start, $count){
-            $q= $this->createQueryBuilder('q')
-                ->getQuery()
-                ->setFirstResult($start)
-                ->setMaxResults($count);
-        return $q->getResult();
+    public function findPlayersInRange($start, $count, $team_id){
+            $q= $this->createQueryBuilder('q');
+            if($team_id) {
+                return $q->add('select', 'p')
+                    ->add('from', 'App:PlayersData p')
+                    ->add('where', 'p.team_id=' . $team_id)
+                    ->getQuery()
+                    ->setFirstResult($start)
+                    ->setMaxResults($count)
+                    ->getResult();
+            }
+             return $q->getQuery()
+                    ->setFirstResult($start)
+                    ->setMaxResults($count)
+                    ->getResult();
     }
 
     // /**
