@@ -119,7 +119,8 @@ http://iplt20-stats.herokuapp.com/api/all-players-list
 Param | Value acceptable | Default Value | Details  
 ------------ | ------------- | ------------- | -------------
 **start_range** | Integer value | 0 | This is taken as the offset value for the total result.
-**data_count** | Integer value | 25 | This is the number of results requested. Maximum possible value is 25. It will be taken as 25 automatically if requested more than it. If number of results found/remained are less than `data_count` with respect to `start_range`, lesser data count of results will be sent as response.
+**data_count** | Integer value | 30 | This is the number of results requested. Maximum possible value is 30. It will be taken as 30 automatically if requested more than it. If number of results found/remained are less than `data_count` with respect to `start_range`, lesser data count of results will be sent as response.
+**team_id** | Integer value | null | Id parameter to get results for a particular team as per id passed.
 **sort_attr** | "matches" \| "not_outs" \| "runs" \| "hundreds" \| "fifties" \| "sixes" \| "catches" \| "overs" \| "wickets" \| "four_wickets" \| "highest" \| "batting_average" \| "bowling_average" \| "strike_rate" \| "economy" | null | The parameter with which the data is desired to be sorted by.
 **order** | "asc" \| "desc" | desc | `asc` means ascending order and `desc` means descending order with respect to `sort_attr`
 
